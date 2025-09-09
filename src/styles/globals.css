@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+/* Theme tokens */
+:root {
+  --bg: 255 255 255;
+  --fg: 17 24 39;
+  --muted: 107 114 128;
+  --brand: 231 111 81; /* #E76F51 */
+}
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: 255 255 255;
+  --fg: 17 24 39;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: 17 24 39;
+  --fg: 243 244 246;
+  --muted: 156 163 175;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply min-h-screen antialiased;
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid rgb(var(--brand));
+  outline-offset: 2px;
+}
