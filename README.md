@@ -12,6 +12,8 @@
 
 > Prep & reusable patterns for **React / Next.js / TypeScript** consulting interviews and proctored tests.
 
+[![Live on Vercel](https://img.shields.io/badge/Vercel-Live-black)](https://react-architect-lab.vercel.app/)
+
 This lab is a compact, production-ish playground to rehearse core competencies:
 
 - Data fetching & **caching** with TanStack Query (optimistic updates, invalidation)
@@ -26,30 +28,32 @@ This lab is a compact, production-ish playground to rehearse core competencies:
 
 ## Table of Contents
 
-- [Tech Stack](#tech-stack)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-  - [Install](#install)
-  - [Run Dev](#run-dev)
-  - [Available Scripts](#available-scripts)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-  - [.env Example](#env-example)
-  - [VS Code Settings](#vs-code-settings)
-- [Core Features](#core-features)
-  - [Data Fetching & Caching](#data-fetching--caching)
-  - [Dark Mode (No FOUC)](#dark-mode-no-fouc)
-  - [Internationalization (i18n)](#internationalization-i18n)
-  - [SSR / ISR](#ssr--isr)
-  - [Testing](#testing)
-- [Accessibility & Performance](#accessibility--performance)
-- [Architecture Decision Records (ADR)](#architecture-decision-records-adr)
-- [Branching & Commits](#branching--commits)
-- [Troubleshooting](#troubleshooting)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Author](#author)
+- [React Architect Lab](#react-architect-lab)
+  - [Table of Contents](#table-of-contents)
+  - [Tech Stack](#tech-stack)
+  - [Requirements](#requirements)
+  - [Getting Started](#getting-started)
+    - [Install](#install)
+    - [Run Dev](#run-dev)
+    - [Available Scripts](#available-scripts)
+  - [Project Structure](#project-structure)
+  - [Configuration](#configuration)
+    - [.env Example](#env-example)
+    - [VS Code Settings](#vs-code-settings)
+  - [Core Features](#core-features)
+    - [Data Fetching \& Caching](#data-fetching--caching)
+    - [Dark Mode (No FOUC)](#dark-mode-no-fouc)
+    - [Internationalization (i18n)](#internationalization-i18n)
+    - [SSR / ISR](#ssr--isr)
+    - [Testing](#testing)
+  - [Accessibility \& Performance](#accessibility--performance)
+  - [Architecture Decision Records (ADR)](#architecture-decision-records-adr)
+  - [Branching \& Commits](#branching--commits)
+  - [Troubleshooting](#troubleshooting)
+  - [Roadmap](#roadmap)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Author](#author)
 
 ---
 
@@ -72,6 +76,7 @@ This lab is a compact, production-ish playground to rehearse core competencies:
 - Git, VS Code (recommended)
 
 Check your versions:
+
 ```bash
 node -v
 pnpm -v
@@ -83,17 +88,20 @@ git --version
 ## Getting Started
 
 ### Install
+
 ```bash
 pnpm install
 ```
 
 ### Run Dev
+
 ```bash
 pnpm dev
 # visit http://localhost:3000
 ```
 
 ### Available Scripts
+
 ```bash
 pnpm dev          # Next.js dev server
 pnpm build        # Production build
@@ -147,7 +155,9 @@ src/
 ## Configuration
 
 ### .env Example
+
 Create `.env.local` for local settings (if/when needed). Nothing is required yet, but this template is handy:
+
 ```dotenv
 # Example only ─ replace with real values when features need them
 NEXT_PUBLIC_APP_NAME="React Architect Lab"
@@ -156,9 +166,11 @@ NEXT_PUBLIC_APP_NAME="React Architect Lab"
 ```
 
 ### VS Code Settings
+
 > (Optional) Recommended workspace settings & extensions.
 
 `.vscode/extensions.json`
+
 ```json
 {
   "recommendations": [
@@ -170,6 +182,7 @@ NEXT_PUBLIC_APP_NAME="React Architect Lab"
 ```
 
 `.vscode/settings.json`
+
 ```json
 {
   "editor.formatOnSave": true,
@@ -185,6 +198,7 @@ NEXT_PUBLIC_APP_NAME="React Architect Lab"
 ## Core Features
 
 ### Data Fetching & Caching
+
 - Use **TanStack Query** for server state:
   - Unique `queryKey`s, set `staleTime` intentionally
   - **Optimistic updates** with rollback on error
@@ -192,6 +206,7 @@ NEXT_PUBLIC_APP_NAME="React Architect Lab"
 - Keep **UI/client state** (form inputs, UI toggles) outside Query (local state/Context/Zustand).
 
 **Provider (client boundary)**
+
 ```tsx
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -203,73 +218,91 @@ export default function QueryProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={client}>
       {children}
-      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      {process.env.NODE_ENV === 'development' && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   );
 }
 ```
 
 ### Dark Mode (No FOUC)
+
 - Theme is set **before paint** via an inline script in `layout.tsx`.
 - Tokens defined as **CSS variables**; Tailwind consumes them.
 - Persist preference with `localStorage` and respect `prefers-color-scheme`.
 
 **Inline theme script**
+
 ```html
 <script>
-(function(){
-  try {
-    const key='theme';
-    const stored=localStorage.getItem(key);
-    const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = stored || (prefersDark ? 'dark' : 'light');
-    document.documentElement.dataset.theme = theme;
-  } catch(e){}
-})();
+  (function () {
+    try {
+      const key = 'theme';
+      const stored = localStorage.getItem(key);
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      const theme = stored || (prefersDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    } catch (e) {}
+  })();
 </script>
 ```
 
 ### Internationalization (i18n)
+
 - `next-intl` recommended for App Router.
 - Keep **messages** in locale files; no hard-coded UI strings in components.
 - Cover **pluralization**/**interpolation**; use `Intl` for dates/numbers/currency.
 - Locale routing: `/en`, `/es`… or domain-based mapping.
 
 ### SSR / ISR
+
 - Server Components by default; client components only when necessary.
 - Use `fetch` with `{ next: { revalidate: N } }` for ISR.
 - Add **Metadata API** (title, canonical, OG) for SEO.
 - Stream with `<Suspense>` where it improves TTFB/LCP.
 
 ### Testing
+
 - **Unit/Integration**: Vitest + React Testing Library + MSW.
   - Test **behavior** (roles/labels, `userEvent`) instead of implementation details.
   - Mock network with **MSW**.
 - **E2E (optional)**: Playwright for one “happy path”.
 
 **Vitest config sketch**
+
 ```ts
 // vitest.config.ts
 import { defineConfig } from 'vitest/config';
 export default defineConfig({
-  test: { environment: 'jsdom', setupFiles: ['./src/tests/setup.ts'], css: true }
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/tests/setup.ts'],
+    css: true,
+  },
 });
 ```
 
 **MSW test server sketch**
+
 ```ts
 // src/tests/testServer.ts
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 
 export const server = setupServer(
-  http.get('/api/todos', () => HttpResponse.json([{ id:'1', title:'Seed', done:false }]))
+  http.get('/api/todos', () =>
+    HttpResponse.json([{ id: '1', title: 'Seed', done: false }])
+  )
 );
 ```
 
 ---
 
 ## Accessibility & Performance
+
 - Landmarks, roles, labels; keyboard navigation; visible focus states.
 - Contrast meets **WCAG 2.2**.
 - **Core Web Vitals**:
@@ -281,6 +314,7 @@ export const server = setupServer(
 ---
 
 ## Architecture Decision Records (ADR)
+
 Keep short ADRs under `docs/adr/`:
 
 ```
@@ -306,6 +340,7 @@ Example topics: “TanStack Query for server state”, “next-intl for i18n”,
 ---
 
 ## Branching & Commits
+
 - Branches: `feat/*`, `fix/*`, `chore/*`, `docs/*`
 - **Conventional Commits**:
   - `feat: add optimistic updates to todos`
@@ -317,21 +352,22 @@ Example topics: “TanStack Query for server state”, “next-intl for i18n”,
 
 ## Troubleshooting
 
-**Dark mode flashes on load**  
+**Dark mode flashes on load**
 Ensure the inline theme script is injected with `strategy="beforeInteractive"` and sets `data-theme` on `<html>`.
 
-**Tests can’t find fetch/API**  
+**Tests can’t find fetch/API**
 Ensure MSW server is set up in `setup.ts`; verify relative URL `/api/...` matches handlers.
 
-**Unexpected double effects**  
+**Unexpected double effects**
 React Strict Mode in dev intentionally double-invokes certain lifecycles. Make side effects idempotent and add proper cleanup.
 
-**404 on nested routes**  
+**404 on nested routes**
 In App Router, make sure you’ve placed `page.tsx` (or `route.ts`) at the correct segment and restarted dev server.
 
 ---
 
 ## Roadmap
+
 - [ ] Todos CRUD with optimistic updates
 - [ ] Dark mode toggle + tokens
 - [ ] i18n (`/en`, `/es`) with pluralization & formatting
@@ -344,7 +380,9 @@ In App Router, make sure you’ve placed `page.tsx` (or `route.ts`) at the corre
 ---
 
 ## Contributing
+
 This repo is primarily a personal lab, but PRs/issues are welcome for:
+
 - Additional practice prompts
 - Testing patterns & accessibility improvements
 - Docs/README enhancements
@@ -354,13 +392,16 @@ Please follow Conventional Commits & keep diffs focused.
 ---
 
 ## License
-**Unlicensed (all rights reserved).**  
+
+**Unlicensed (all rights reserved).**
 If you intend to share or reuse, add a license (e.g., MIT) and update this section.
 
 ---
 
 ## Author
-**Andrew Teece**  
-- Portfolio: https://andrewteece.com  
-- GitHub: https://github.com/andrewteece  
+
+**Andrew Teece**
+
+- Portfolio: https://andrewteece.com
+- GitHub: https://github.com/andrewteece
 - LinkedIn: https://www.linkedin.com/in/andrew-teece
