@@ -17,19 +17,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm # caches based on pnpm-lock.yaml
+          cache: pnpm # enables pnpm store caching based on pnpm-lock.yaml
 
-      # Ensure pnpm is on PATH (Corepack first, fallback to npm -g)
-      - name: Activate pnpm
+      # 🔧 GUARANTEED PNPM INSTALL (explicit, no Corepack dependency)
+      - name: Install pnpm
         run: |
           set -euxo pipefail
-          corepack enable || true
-          # Try to use the version pinned in package.json; if that fails, install explicitly.
-          (corepack use pnpm || corepack prepare pnpm@10.15.1 --activate || npm i -g pnpm@10.15.1)
+          npm i -g pnpm@10.15.1
           which pnpm
           pnpm -v
 
-      - name: Install deps
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Lint
