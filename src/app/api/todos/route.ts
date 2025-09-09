@@ -1,18 +1,9 @@
 import { NextResponse } from 'next/server';
-
-type Todo = { id: string; title: string; done: boolean };
-
-// In-memory store (resets on dev reloads—fine for a lab)
-let todos: Todo[] = [
-  { id: '1', title: 'Wire up React Query', done: true },
-  { id: '2', title: 'Build Todos with optimistic updates', done: false },
-];
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { addTodo, listTodos, sleep } from './_store';
 
 export async function GET() {
-  await sleep(200); // tiny delay to see loading state
-  return NextResponse.json(todos);
+  await sleep(200);
+  return NextResponse.json(listTodos());
 }
 
 export async function POST(req: Request) {
@@ -21,8 +12,7 @@ export async function POST(req: Request) {
   if (!title)
     return NextResponse.json({ error: 'Title required' }, { status: 400 });
 
-  const todo: Todo = { id: crypto.randomUUID(), title, done: false };
-  todos = [todo, ...todos];
+  const created = addTodo(title);
   await sleep(150);
-  return NextResponse.json(todo, { status: 201 });
+  return NextResponse.json(created, { status: 201 });
 }
