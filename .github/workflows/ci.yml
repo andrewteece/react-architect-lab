@@ -23,7 +23,7 @@ jobs:
         run: |
           corepack enable
           # Use the version pinned in "packageManager"
-          corepack use pnpm
+          corepack use pnpm || corepack prepare pnpm@10.15.1 --activate
           pnpm -v
 
       - name: Install deps
