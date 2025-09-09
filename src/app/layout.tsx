@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import '../styles/globals.css';
+import QueryProviders from './providers';
 
 export const metadata: Metadata = {
   title: 'React Architect Lab',
@@ -34,7 +35,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <QueryProviders>{children}</QueryProviders>
+      </body>
     </html>
   );
 }
