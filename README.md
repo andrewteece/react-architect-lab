@@ -1,5 +1,6 @@
 # React Architect Lab
 
+[![CI](https://github.com/andrewteece/react-architect-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewteece/react-architect-lab/actions/workflows/ci.yml)
 [![Next.js](https://img.shields.io/badge/Next.js-App%20Router-000?logo=nextdotjs)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=000)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178c6?logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
@@ -43,6 +44,7 @@ This lab is a compact, production-ish playground to rehearse core competencies:
   - [SSR / ISR](#ssr--isr)
   - [Testing](#testing)
 - [Accessibility & Performance](#accessibility--performance)
+- [CI/CD](#cicd)
 - [Architecture Decision Records (ADR)](#architecture-decision-records-adr)
 - [Branching & Commits](#branching--commits)
 - [Troubleshooting](#troubleshooting)
@@ -277,6 +279,46 @@ export const server = setupServer(
   - Optimize images, self-host fonts carefully
   - Stream where possible; split code prudently
 - No sensitive env vars in client code.
+
+---
+
+## CI/CD
+
+The project includes automated continuous integration using GitHub Actions. The workflow is configured to:
+
+### 📋 CI Pipeline Features
+
+- **PNPM Setup**: Properly installs PNPM before attempting to use it for caching
+- **Node.js 22**: Configured for the latest Node.js LTS version
+- **Dependency Caching**: Leverages PNPM's efficient caching for faster builds
+- **Quality Checks**: Runs ESLint for code quality
+- **Build Verification**: Compiles the Next.js application
+- **Testing**: Executes available test suites (unit/integration/e2e)
+
+### 🚀 Workflow Triggers
+
+The CI workflow runs on:
+- Pushes to `main` and `develop` branches
+- Pull requests targeting `main` and `develop` branches
+
+### ⚙️ Workflow Steps
+
+1. **Checkout**: Retrieves the repository code
+2. **PNPM Setup**: Installs PNPM package manager (version 9)
+3. **Node.js Setup**: Installs Node.js 22 with PNPM caching
+4. **Dependencies**: Installs project dependencies with frozen lockfile
+5. **Lint**: Runs ESLint for code quality checks
+6. **Build**: Compiles the Next.js application
+7. **Test**: Runs available test suites (gracefully handles missing tests)
+8. **E2E Tests**: Runs Playwright tests if configuration exists
+
+### 🔧 Configuration
+
+The workflow file is located at `.github/workflows/ci.yml` and includes:
+- Error handling for missing test scripts
+- Conditional Playwright test execution
+- Disabled Next.js telemetry for CI environment
+- Continue-on-error for optional steps
 
 ---
 
