@@ -17,12 +17,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: pnpm # cache based on pnpm-lock.yaml
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+      - name: Enable Corepack & activate pnpm from package.json
+        run: |
+          corepack enable
+          # Use the version pinned in "packageManager"
+          corepack use pnpm
+          pnpm -v
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
