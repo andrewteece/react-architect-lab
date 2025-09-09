@@ -17,13 +17,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm # cache based on pnpm-lock.yaml
+          cache: pnpm # caches based on pnpm-lock.yaml
 
-      - name: Enable Corepack & activate pnpm from package.json
+      # 🟢 Install/activate pnpm (Corepack) — prints pnpm -v so you can verify
+      - name: Enable Corepack & activate pnpm
         run: |
           corepack enable
-          # Use the version pinned in "packageManager"
-          corepack use pnpm || corepack prepare pnpm@10.15.1 --activate
+          # Try to use version pinned in package.json → fall back to explicit version
+          (corepack use pnpm || corepack prepare pnpm@10.15.1 --activate)
+          which pnpm
           pnpm -v
 
       - name: Install deps
