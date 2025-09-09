@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import ThemeToggle from './(features)/settings/ThemeToggle';
 
 export default function Home() {
@@ -7,10 +8,18 @@ export default function Home() {
         <h1 className='text-2xl font-semibold'>React Architect Lab</h1>
         <ThemeToggle />
       </header>
+
       <p className='text-sm' style={{ color: `rgb(var(--muted))` }}>
         Practice ground for caching, dark mode, i18n, SSR/ISR, testing, and
         migrations.
       </p>
+
+      <Link
+        href='/todos'
+        className='inline-block rounded-md border px-3 py-2 text-sm'
+      >
+        Open Todos demo →
+      </Link>
     </main>
   );
 }
