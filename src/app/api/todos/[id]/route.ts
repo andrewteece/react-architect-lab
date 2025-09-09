@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteTodo, sleep, toggleTodo } from '../_store';
+import { getTodo, removeTodo, sleep, toggleTodo } from '../_store';
 
 export async function PATCH(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  const existing = getTodo(id);
+  if (!existing)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
   const updated = toggleTodo(id);
   await sleep(120);
-  if (!updated)
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(updated);
 }
 
@@ -18,8 +20,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const ok = deleteTodo(id);
-  await sleep(120);
-  if (!ok) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  return NextResponse.json({ ok: true });
+  const existing = getTodo(id);
+  if (!existing)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  removeTodo(id);
+  await sleep(100);
+  return new NextResponse(null, { status: 204 });
 }
