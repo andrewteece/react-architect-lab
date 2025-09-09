@@ -1,11 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { deleteTodo, sleep, toggleTodo } from '../_store';
 
 export async function PATCH(
-  _req: Request,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const updated = toggleTodo(params.id);
+  const { id } = await params;
+  const updated = toggleTodo(id);
   await sleep(120);
   if (!updated)
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -13,10 +14,11 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: Request,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const ok = deleteTodo(params.id);
+  const { id } = await params;
+  const ok = deleteTodo(id);
   await sleep(120);
   if (!ok) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json({ ok: true });

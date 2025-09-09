@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { addTodo, listTodos, sleep } from './_store';
 
-export async function GET() {
+export async function GET(_req: NextRequest) {
   await sleep(200);
   return NextResponse.json(listTodos());
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = (await req.json()) as { title?: string };
   const title = (body.title ?? '').trim();
   if (!title)
