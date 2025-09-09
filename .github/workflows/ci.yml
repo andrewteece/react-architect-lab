@@ -19,12 +19,13 @@ jobs:
           node-version: 22
           cache: pnpm # caches based on pnpm-lock.yaml
 
-      # 🟢 Install/activate pnpm (Corepack) — prints pnpm -v so you can verify
-      - name: Enable Corepack & activate pnpm
+      # Ensure pnpm is on PATH (Corepack first, fallback to npm -g)
+      - name: Activate pnpm
         run: |
-          corepack enable
-          # Try to use version pinned in package.json → fall back to explicit version
-          (corepack use pnpm || corepack prepare pnpm@10.15.1 --activate)
+          set -euxo pipefail
+          corepack enable || true
+          # Try to use the version pinned in package.json; if that fails, install explicitly.
+          (corepack use pnpm || corepack prepare pnpm@10.15.1 --activate || npm i -g pnpm@10.15.1)
           which pnpm
           pnpm -v
 
