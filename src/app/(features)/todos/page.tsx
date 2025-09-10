@@ -1,4 +1,4 @@
-import ThemeToggle from '../settings/ThemeToggle';
+import ThemeToggle from '@/app/(features)/settings/ThemeToggle';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 
