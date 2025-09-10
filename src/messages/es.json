@@ -1,0 +1,23 @@
+{
+  "Meta": {
+    "title": "React Architect Lab",
+    "description": "Laboratorio React/Next: caché, i18n, pruebas"
+  },
+  "Home": {
+    "title": "React Architect Lab",
+    "tagline": "⚠️ ES:Terreno de práctica para caché, modo oscuro, i18n, SSR/ISR y pruebas.",
+    "openTodos": "Abrir demo de Todos →"
+  },
+  "Todos": {
+    "title": "Tareas",
+    "loading": "Cargando tareas…",
+    "empty": "No hay tareas aún.",
+    "remaining": "Quedan {count}",
+    "delete": "Eliminar {title}"
+  },
+  "UI": {
+    "switchTo": "Cambiar a modo {mode}",
+    "light": "claro",
+    "dark": "oscuro"
+  }
+}

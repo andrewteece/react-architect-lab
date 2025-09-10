@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import TodoForm from '../app/(features)/todos/TodoForm';
-import TodoList from '../app/(features)/todos/TodoList';
+import TodoForm from '../app/[locale]/(features)/todos/TodoForm';
+import TodoList from '../app/[locale]/(features)/todos/TodoList';
 import QueryProviders from '../app/providers';
 
 function AppUnderTest() {

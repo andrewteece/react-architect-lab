@@ -1,0 +1,23 @@
+{
+  "Meta": {
+    "title": "React Architect Lab",
+    "description": "React/Next lab: caching, i18n, tests"
+  },
+  "Home": {
+    "title": "React Architect Lab",
+    "tagline": "Practice ground for caching, dark mode, i18n, SSR/ISR, testing, and migrations.",
+    "openTodos": "Open Todos demo →"
+  },
+  "Todos": {
+    "title": "Todos",
+    "loading": "Loading todos…",
+    "empty": "No todos yet.",
+    "remaining": "{count} remaining",
+    "delete": "Delete {title}"
+  },
+  "UI": {
+    "switchTo": "Switch to {mode} mode",
+    "light": "light",
+    "dark": "dark"
+  }
+}
