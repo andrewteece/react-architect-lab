@@ -11,17 +11,18 @@ import {
 } from 'next-intl/server';
 import { locales } from '../../i18n/config';
 
-// Pre-generate routes like / and /es
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// Localized SEO
-export async function generateMetadata(props: {
-  params: { locale: string };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Meta' });
+
   return {
     title: t('title'),
     description: t('description'),
@@ -52,15 +53,17 @@ const themeScript = `
 })();
 `;
 
-export default async function RootLayout(props: {
+export default async function RootLayout({
+  children,
+  params,
+}: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const { children } = props;
-  const { locale } = await props.params;
+  const { locale } = await params;
 
-  setRequestLocale(locale); // <- tell next-intl which locale this render is for
-  const messages = await getMessages(); // <- loads from src/i18n/request.ts
+  setRequestLocale(locale);
+  const messages = await getMessages();
 
   return (
     <html lang={locale}>
