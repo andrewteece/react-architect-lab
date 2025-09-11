@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addTodo, listTodos, sleep } from './_store';
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   await sleep(200);
   return NextResponse.json(listTodos());
 }
